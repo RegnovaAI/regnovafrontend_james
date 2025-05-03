@@ -3,6 +3,18 @@ import { useRef } from "react";
 export default function Home() {
   const fileInputRef = useRef();
 
+
+ 
+  const response = await fetch("https://your-backend-url/upload/", {
+    method: "POST",
+    body: formData,
+  });
+  
+
+
+
+   
+
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };

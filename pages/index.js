@@ -79,27 +79,43 @@ export default function Home() {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Selected file:", file.name);
 
-      const formData = new FormData();
-      formData.append("file", file);
 
-      try {
-        const response = await fetch("https://your-backend-url/upload/", {
-          method: "POST",
-          body: formData,
-        });
 
-        const result = await response.json();
-        console.log("Upload result:", result);
-      } catch (error) {
-        console.error("Upload failed:", error);
-      }
+
+const handleFileChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch("https://regnovaai-backend.onrender.com/upload/", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Upload failed!");
     }
-  };
+
+    const data = await response.json(); // Parse backend response
+    alert(`✅ Uploaded successfully: ${data.filename}`);
+  } catch (error) {
+    alert(`⚠️ Upload failed: ${error.message}`);
+  }
+};
+
+
+
+
+  
+
+
+
+
+
 
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col items-center justify-center px-6">

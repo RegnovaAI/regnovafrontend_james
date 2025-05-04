@@ -586,12 +586,12 @@
 
 
 'use client';
-
+pwd
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import RiskCard from ' ./components/RiskCard';
-import { generatePDFReport } from './utils/generatePDF';
-import { generateCSV } from './utils/generateCSV';
+import RiskCard from ' ../../components/RiskCard';
+import { generatePDFReport } from '../../utils/generatePDF';
+import { generateCSV } from '../../utils/generateCSV';
 
 export default function UploadPage() {
   const [selectedFile, setSelectedFile] = useState(null);

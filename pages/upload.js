@@ -589,7 +589,7 @@
 pwd
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import RiskCard from ' ../components/RiskCard';
+import RiskCard from '../components/RiskCard';
 import { generatePDFReport } from '../utils/generatePDF';
 import { generateCSV } from '../utils/generateCSV';
 

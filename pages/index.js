@@ -480,97 +480,231 @@
 
 
 
-'use client';
-import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import RiskCard from '../components/RiskCard';
+// 'use client';
+// import { useCallback, useState } from 'react';
+// import { useDropzone } from 'react-dropzone';
+// import RiskCard from '../components/RiskCard';
+
+// export default function Home() {
+//   const [results, setResults] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [filename, setFilename] = useState('');
+
+//   const onDrop = useCallback(async (acceptedFiles) => {
+//     const file = acceptedFiles[0];
+//     if (!file) return;
+
+//     const formData = new FormData();
+//     formData.append('file', file);
+//     setLoading(true);
+//     setFilename(file.name);
+
+//     try {
+//       const response = await fetch('https://regnovaai-backend.onrender.com/upload/', {
+//         method: 'POST',
+//         body: formData,
+//       });
+
+//       const data = await response.json();
+//       if (data.risk_report) {
+//         setResults(data.risk_report);
+//       } else {
+//         alert('⚠️ No risk report returned.');
+//       }
+//     } catch (error) {
+//       alert('⚠️ Upload failed. Check console for error.');
+//       console.error(error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   }, []);
+
+//   const { getRootProps, getInputProps, open } = useDropzone({
+//     onDrop,
+//     noClick: true,
+//     accept: {
+//       'application/pdf': ['.pdf'],
+//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+//       'text/csv': ['.csv'],
+//       'text/plain': ['.txt']
+//     }
+//   });
+
+//   const riskCounts = {
+//     High: results.filter(r => r.risk_level === "High").length,
+//     Medium: results.filter(r => r.risk_level === "Medium").length,
+//     Low: results.filter(r => r.risk_level === "Low").length,
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-white text-gray-900 px-4 py-10">
+//       <h1 className="text-4xl font-bold text-center text-blue-600 mb-2">RegnovaAI Compliance Audit</h1>
+//       <p className="text-center mb-8 text-lg text-gray-600">Upload your compliance document for risk analysis</p>
+
+//       <div {...getRootProps()} className="border-2 border-dashed border-blue-300 p-6 rounded-xl bg-blue-50 text-center mb-6 cursor-pointer">
+//         <input {...getInputProps()} />
+//         <p>📄 Drag & drop your document here, or click the button below</p>
+//         <button
+//           onClick={open}
+//           className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+//         >
+//           Browse Files
+//         </button>
+//       </div>
+
+//       {loading && <p className="text-center text-blue-500">⏳ Analyzing document...</p>}
+
+//       {!loading && results.length > 0 && (
+//         <>
+//           <div className="text-center mt-6">
+//             <h2 className="text-xl font-bold mb-2">File Audited: <span className="text-blue-700">{filename}</span></h2>
+//             <div className="flex justify-center gap-6 mt-2">
+//               <span className="text-red-600 font-semibold">High: {riskCounts.High}</span>
+//               <span className="text-yellow-600 font-semibold">Medium: {riskCounts.Medium}</span>
+//               <span className="text-green-600 font-semibold">Low: {riskCounts.Low}</span>
+//             </div>
+//           </div>
+
+//           <div className="mt-8 max-w-3xl mx-auto">
+//             {results.map((risk, index) => (
+//               <RiskCard key={index} {...risk} index={index} />
+//             ))}
+//           </div>
+//         </>
+//       )}
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+"use client";
+
+import { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import RiskCard from "../components/RiskCard";
+import { generatePDFReport } from "../utils/generatePDF";
+import { generateCSV } from "../utils/generateCSV";
 
 export default function Home() {
-  const [results, setResults] = useState([]);
+  const [fileName, setFileName] = useState(null);
+  const [risks, setRisks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filename, setFilename] = useState('');
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
+    setFileName(file.name);
     setLoading(true);
-    setFilename(file.name);
+
+    const formData = new FormData();
+    formData.append("file", file);
 
     try {
-      const response = await fetch('https://regnovaai-backend.onrender.com/upload/', {
-        method: 'POST',
+      const response = await fetch("https://regnovaai-backend.onrender.com/upload/", {
+        method: "POST",
         body: formData,
       });
 
       const data = await response.json();
-      if (data.risk_report) {
-        setResults(data.risk_report);
-      } else {
-        alert('⚠️ No risk report returned.');
+      if (!response.ok) {
+        throw new Error(data.detail || "Upload failed!");
       }
+
+      setRisks(data.risk_report || []);
     } catch (error) {
-      alert('⚠️ Upload failed. Check console for error.');
-      console.error(error);
+      alert("Error uploading file: " + error.message);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const { getRootProps, getInputProps, open } = useDropzone({
-    onDrop,
-    noClick: true,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'text/csv': ['.csv'],
-      'text/plain': ['.txt']
-    }
-  });
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  const riskCounts = {
-    High: results.filter(r => r.risk_level === "High").length,
-    Medium: results.filter(r => r.risk_level === "Medium").length,
-    Low: results.filter(r => r.risk_level === "Low").length,
-  };
+  const countRisks = (level) =>
+    risks.filter((risk) => risk.risk_level?.toLowerCase() === level.toLowerCase()).length;
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 px-4 py-10">
-      <h1 className="text-4xl font-bold text-center text-blue-600 mb-2">RegnovaAI Compliance Audit</h1>
-      <p className="text-center mb-8 text-lg text-gray-600">Upload your compliance document for risk analysis</p>
+    <div className="min-h-screen p-8 bg-white text-gray-800">
+      <h1 className="text-4xl font-bold mb-4 text-center text-black">
+        Upload a Document for Compliance Audit
+      </h1>
+      <p className="text-center mb-6 text-lg">
+        Drag and drop your compliance document or click the box to upload.
+      </p>
 
-      <div {...getRootProps()} className="border-2 border-dashed border-blue-300 p-6 rounded-xl bg-blue-50 text-center mb-6 cursor-pointer">
+      <div
+        {...getRootProps()}
+        className="border-dashed border-4 border-blue-500 rounded-xl p-8 text-center cursor-pointer mb-4"
+      >
         <input {...getInputProps()} />
-        <p>📄 Drag & drop your document here, or click the button below</p>
-        <button
-          onClick={open}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
+        <p className="text-xl">⬆️ Drag & Drop files here</p>
+      </div>
+
+      <div className="text-center space-y-2">
+        <p>or</p>
+        <label className="bg-gray-200 px-4 py-2 rounded cursor-pointer inline-block">
           Browse Files
+          <input type="file" className="hidden" onChange={(e) => onDrop([e.target.files[0]])} />
+        </label>
+        <button
+          className="bg-pink-200 px-4 py-2 rounded ml-2"
+          onClick={() => {
+            const demo = new File(["Sample content"], "demo.txt", { type: "text/plain" });
+            onDrop([demo]);
+          }}
+        >
+          🚀 Try Demo File
         </button>
       </div>
 
-      {loading && <p className="text-center text-blue-500">⏳ Analyzing document...</p>}
+      {fileName && <p className="mt-4 text-green-600">✅ File Selected: {fileName}</p>}
 
-      {!loading && results.length > 0 && (
-        <>
-          <div className="text-center mt-6">
-            <h2 className="text-xl font-bold mb-2">File Audited: <span className="text-blue-700">{filename}</span></h2>
-            <div className="flex justify-center gap-6 mt-2">
-              <span className="text-red-600 font-semibold">High: {riskCounts.High}</span>
-              <span className="text-yellow-600 font-semibold">Medium: {riskCounts.Medium}</span>
-              <span className="text-green-600 font-semibold">Low: {riskCounts.Low}</span>
-            </div>
+      {loading && <p className="text-center mt-6 text-blue-600">Analyzing document...</p>}
+
+      {risks.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-3xl font-semibold flex items-center">
+            🛡️ Flagged Compliance Risks
+          </h2>
+
+          <div className="mt-2 mb-6 flex gap-6">
+            <p className="text-red-600">🟥 High: {countRisks("High")}</p>
+            <p className="text-orange-500">🟧 Medium: {countRisks("Medium")}</p>
+            <p className="text-green-600">🟩 Low: {countRisks("Low")}</p>
           </div>
 
-          <div className="mt-8 max-w-3xl mx-auto">
-            {results.map((risk, index) => (
-              <RiskCard key={index} {...risk} index={index} />
+          <div className="space-y-4">
+            {risks.map((risk, index) => (
+              <RiskCard key={index} risk={risk} index={index} />
             ))}
           </div>
-        </>
+
+          <div className="mt-8 space-x-4">
+            <button
+              onClick={() => generatePDFReport(risks, fileName)}
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              📄 Export to PDF
+            </button>
+            <button
+              onClick={() => generateCSV(risks, fileName)}
+              className="bg-green-600 text-white px-4 py-2 rounded"
+            >
+              📊 Export to CSV
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -587,6 +587,147 @@
 
 
 
+// "use client";
+
+// import { useState, useCallback } from "react";
+// import { useDropzone } from "react-dropzone";
+// import RiskCard from "../components/RiskCard";
+// import { generatePDFReport } from "../utils/generatePDF";
+// import { generateCSV } from "../utils/generateCSV";
+
+// export default function Home() {
+//   const [fileName, setFileName] = useState(null);
+//   const [risks, setRisks] = useState([]);
+//   const [loading, setLoading] = useState(false);
+
+//   const onDrop = useCallback(async (acceptedFiles) => {
+//     const file = acceptedFiles[0];
+//     if (!file) return;
+
+//     setFileName(file.name);
+//     setLoading(true);
+
+//     const formData = new FormData();
+//     formData.append("file", file);
+
+//     try {
+//       const response = await fetch("https://regnovaai-backend.onrender.com/upload/", {
+//         method: "POST",
+//         body: formData,
+//       });
+
+//       const data = await response.json();
+//       if (!response.ok) {
+//         throw new Error(data.detail || "Upload failed!");
+//       }
+
+//       setRisks(data.risk_report || []);
+//     } catch (error) {
+//       alert("Error uploading file: " + error.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   }, []);
+
+//   const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+//   const countRisks = (level) =>
+//     risks.filter((risk) => risk.risk_level?.toLowerCase() === level.toLowerCase()).length;
+
+//   return (
+//     <div className="min-h-screen p-8 bg-white text-gray-800">
+//       <h1 className="text-4xl font-bold mb-4 text-center text-black">
+//         Upload a Document for Compliance Audit
+//       </h1>
+//       <p className="text-center mb-6 text-lg">
+//         Drag and drop your compliance document or click the box to upload.
+//       </p>
+
+//       <div
+//         {...getRootProps()}
+//         className="border-dashed border-4 border-blue-500 rounded-xl p-8 text-center cursor-pointer mb-4"
+//       >
+//         <input {...getInputProps()} />
+//         <p className="text-xl">⬆️ Drag & Drop files here</p>
+//       </div>
+
+//       <div className="text-center space-y-2">
+//         <p>or</p>
+//         <label className="bg-gray-200 px-4 py-2 rounded cursor-pointer inline-block">
+//           Browse Files
+//           <input type="file" className="hidden" onChange={(e) => onDrop([e.target.files[0]])} />
+//         </label>
+//         <button
+//           className="bg-pink-200 px-4 py-2 rounded ml-2"
+//           onClick={() => {
+//             const demo = new File(["Sample content"], "demo.txt", { type: "text/plain" });
+//             onDrop([demo]);
+//           }}
+//         >
+//           🚀 Try Demo File
+//         </button>
+//       </div>
+
+//       {fileName && <p className="mt-4 text-green-600">✅ File Selected: {fileName}</p>}
+
+//       {loading && <p className="text-center mt-6 text-blue-600">Analyzing document...</p>}
+
+//       {risks.length > 0 && (
+//         <div className="mt-8">
+//           <h2 className="text-3xl font-semibold flex items-center">
+//             🛡️ Flagged Compliance Risks
+//           </h2>
+
+//           <div className="mt-2 mb-6 flex gap-6">
+//             <p className="text-red-600">🟥 High: {countRisks("High")}</p>
+//             <p className="text-orange-500">🟧 Medium: {countRisks("Medium")}</p>
+//             <p className="text-green-600">🟩 Low: {countRisks("Low")}</p>
+//           </div>
+
+//           <div className="space-y-4">
+//             {risks.map((risk, index) => (
+//               <RiskCard key={index} risk={risk} index={index} />
+//             ))}
+//           </div>
+
+//           <div className="mt-8 space-x-4">
+//             <button
+//               onClick={() => generatePDFReport(risks, fileName)}
+//               className="bg-blue-600 text-white px-4 py-2 rounded"
+//             >
+//               📄 Export to PDF
+//             </button>
+//             <button
+//               onClick={() => generateCSV(risks, fileName)}
+//               className="bg-green-600 text-white px-4 py-2 rounded"
+//             >
+//               📊 Export to CSV
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useState, useCallback } from "react";

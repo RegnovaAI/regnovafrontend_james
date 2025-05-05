@@ -586,7 +586,6 @@
 
 
 'use client';
-pwd
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import RiskCard from '../components/RiskCard';

@@ -317,6 +317,12 @@ export default function UploadPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 7l-4-4m0 0L8 7m4-4v12" />
             </svg>
             <p className="text-lg font-semibold text-blue-100">Drag and drop a document here, or click to select one</p>
+
+                   <button className="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition">
+                    Browse Files
+                    </button>
+
+
           </div>
         </div>
 

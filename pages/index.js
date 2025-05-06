@@ -701,7 +701,7 @@ export default function HomePage() {
 
         {/* Logos */}
         <div className="flex justify-center items-center gap-4 mt-6">
-          <img src="/public/said-logo.png" alt="Said Business School" className="h-10" />
+          <img src="/said-logo.png" alt="Said Business School" className="w-24 mx-auto mb-6" />
           <img src="/oxford-logo.png" alt="Oxford University" className="h-10" />
         </div>
 

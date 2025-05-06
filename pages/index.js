@@ -303,7 +303,7 @@ export default function UploadPage() {
     <div className="min-h-screen text-white bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12">
       <div className="max-w-4xl mx-auto text-center">
 
-        <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto mb-6" width="40" height="40"/>
+        <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto mb-6" width="140" height="140"/>
         <h1 className="text-4xl sm:text-5xl font-bold mb-3">Welcome to RegnovaAI</h1>
         <p className="text-lg text-blue-100 mb-10">
           AI-powered risk analysis, compliance scoring, and audit reporting for your documents.

@@ -211,7 +211,6 @@
 
 
 
-
 'use client';
 
 import { useState, useCallback } from 'react';
@@ -301,43 +300,38 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-50 via-blue-50 to-purple-50 px-4 py-10 flex flex-col items-center font-sans">
+    <div className="min-h-screen text-white bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12">
       <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-5xl font-extrabold text-indigo-700 mb-4 leading-tight">RegnovaAI</h1>
-        <p className="text-lg text-gray-600 mb-8 italic">“Empowering compliance through intelligent document analysis.”</p>
 
-        <div className="flex justify-center">
-          <div
-            {...getRootProps()}
-            className="w-full max-w-[420px] border-2 border-dashed border-blue-400 bg-white/60 backdrop-blur-lg rounded-2xl p-8 shadow-xl hover:bg-white/80 cursor-pointer transition-all"
-          >
-            <input {...getInputProps()} />
-            <div className="flex flex-col items-center space-y-3">
-              <img src="/upload-icon.png" alt="Upload" className="w-12 h-12" />
-              <p className="text-lg font-semibold text-blue-700">Drag & Drop files here</p>
-              <p className="text-sm text-gray-500">or</p>
-              <button className="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition">
-                Browse Files
-              </button>
-            </div>
+        <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto mb-6" />
+        <h1 className="text-4xl sm:text-5xl font-bold mb-3">Welcome to RegnovaAI</h1>
+        <p className="text-lg text-blue-100 mb-10">
+          AI-powered risk analysis, compliance scoring, and audit reporting for your documents.
+        </p>
+
+        <div {...getRootProps()} className="cursor-pointer border-2 border-dashed border-blue-400 bg-blue-950/30 rounded-xl p-8 shadow-xl transition hover:bg-blue-800">
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center space-y-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 7l-4-4m0 0L8 7m4-4v12" />
+            </svg>
+            <p className="text-lg font-semibold text-blue-100">Drag and drop a document here, or click to select one</p>
           </div>
         </div>
 
-        <div className="mt-6">
-          <button
-            onClick={loadDemoFile}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded shadow text-lg"
-          >
-            🚀 Try Demo File
-          </button>
-        </div>
+        <button
+          onClick={loadDemoFile}
+          className="mt-6 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow-lg"
+        >
+          🚀 Try Demo File
+        </button>
 
         {uploading && (
-          <div className="w-full mt-6">
+          <div className="mt-8">
             <div className="w-full bg-gray-200 rounded-full h-3">
               <div className="bg-blue-600 h-3 rounded-full animate-pulse w-2/3"></div>
             </div>
-            <p className="text-sm text-blue-600 mt-2">Uploading and analyzing...</p>
+            <p className="text-sm text-blue-200 mt-2">Analyzing document...</p>
           </div>
         )}
 
@@ -348,11 +342,10 @@ export default function UploadPage() {
         )}
 
         {riskReport.length > 0 && (
-          <div className="mt-10">
-            <h2 className="text-2xl font-semibold mb-4 text-blue-800">
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold mb-4 text-white">
               🛡️ Flagged Compliance Risks
             </h2>
-
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg mb-8">
               <div className="bg-red-100 text-red-800 py-2 px-4 rounded-lg shadow">🟥 High: {countByRisk.High}</div>
               <div className="bg-yellow-100 text-yellow-800 py-2 px-4 rounded-lg shadow">🟧 Medium: {countByRisk.Medium}</div>
@@ -368,25 +361,31 @@ export default function UploadPage() {
             <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-6">
               <button
                 onClick={() => generateCSV(selectedFile?.name || "document", riskReport)}
-                className="mt-4 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 shadow text-lg"
+                className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 shadow"
               >
                 📊 Download CSV Report
               </button>
-
               <button
                 onClick={() => generatePDFReport(selectedFile?.name || "document", riskReport)}
-                className="mt-8 bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 shadow text-lg"
+                className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 shadow"
               >
                 📄 Download PDF Report
               </button>
             </div>
-
-            <div className="mb-24"></div>
           </div>
         )}
+
+        <div className="mt-20 text-left bg-white text-gray-800 p-6 rounded-xl shadow-xl">
+          <h3 className="text-2xl font-bold mb-2">About RegnovaAI</h3>
+          <p>
+            RegnovaAI is a pioneering AI startup focused on streamlining compliance risk audits for enterprises. By leveraging advanced document parsing and LLM-driven analysis, RegnovaAI delivers actionable reports on data handling, consent, GDPR, and more — helping teams mitigate risk and stay compliant effortlessly.
+          </p>
+        </div>
+
+        <footer className="mt-16 text-sm text-blue-200">
+          &copy; {new Date().getFullYear()} RegnovaAI. All rights reserved.
+        </footer>
       </div>
     </div>
   );
 }
-
-

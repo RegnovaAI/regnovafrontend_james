@@ -536,17 +536,23 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white px-4 py-10">
-      <div className="max-w-4xl w-full text-center space-y-10">
+<div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white px-4 py-10">
+    <div className="w-full max-w-4xl text-center space-y-10">
 
-        <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto" width="140" height="140" />
+      <img
+        src="/regnovaai-logo.png"
+        alt="RegnovaAI Logo"
+        className="w-32 mx-auto"
+        width="140"
+        height="140"
+      />
 
-        <div className="space-y-3">
-          <h1 className="text-4xl sm:text-5xl font-bold">Welcome to RegnovaAI</h1>
-          <p className="text-lg text-blue-100">
-            AI-powered risk analysis, compliance scoring, and audit reporting for your documents.
-          </p>
-        </div>
+      <div className="space-y-3">
+        <h1 className="text-4xl sm:text-5xl font-bold">Welcome to RegnovaAI</h1>
+        <p className="text-lg text-blue-100">
+          AI-powered risk analysis, compliance scoring, and audit reporting for your documents.
+        </p>
+      </div>
 
         <div {...getRootProps()} className="cursor-pointer border-2 border-dashed border-blue-400 bg-blue-950/30 rounded-xl p-8 shadow-xl transition hover:bg-blue-800">
           <input {...getInputProps()} />

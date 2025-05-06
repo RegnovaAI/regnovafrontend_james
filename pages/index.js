@@ -300,9 +300,8 @@ export default function UploadPage() {
   };
 
   return (
-    //<div className="min-h-screen text-white bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12"> ---updated with bewlow to centre
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black px-4 text-white">
- 
+     <div className="min-h-screen text-white bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12"> ---updated with bewlow to centre
+    
       <div className="max-w-4xl mx-auto text-center">
 
         <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto mb-6" width="140" height="140"/>

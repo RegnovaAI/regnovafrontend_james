@@ -1,3 +1,217 @@
+// 'use client';
+
+// import { useState, useCallback } from 'react';
+// import { useDropzone } from 'react-dropzone';
+// import RiskCard from '../components/RiskCard';
+// import { generatePDFReport } from '../utils/generatePDF';
+// import { generateCSV } from '../utils/generateCSV';
+
+// export default function UploadPage() {
+//   const [selectedFile, setSelectedFile] = useState(null);
+//   const [riskReport, setRiskReport] = useState([]);
+//   const [uploading, setUploading] = useState(false);
+
+//   const onDrop = useCallback(async (acceptedFiles) => {
+//     const file = acceptedFiles[0];
+//     if (file) {
+//       setSelectedFile(file);
+//       setUploading(true);
+
+//       const formData = new FormData();
+//       formData.append("file", file);
+
+//       try {
+//         //const response = await fetch("http://localhost:8000/upload/", {
+//           const response = await fetch("https://regnovaai-backend.onrender.com/upload/", { 
+//           method: "POST",
+//           body: formData,
+//         });
+
+//         const data = await response.json();
+//         setRiskReport(data.risk_report);
+//         setUploading(false);
+
+//         if (data.content) {
+//           alert("✅ File uploaded! Preview:\n" + data.content.slice(0, 300));
+//         } else {
+//           alert("⚠️ No content returned");
+//         }
+//       } catch (error) {
+//         console.error("❌ Upload failed:", error);
+//         alert("❌ Upload failed. Check console.");
+//         setUploading(false);
+//       }
+//     }
+//   }, []);
+
+//   const loadDemoFile = () => {
+//     const demoRisks = [
+//       {
+//         issue: "Missing Encryption Policy",
+//         risk_level: "High",
+//         explanation: "The document lacks guidelines for encrypting data at rest and in transit.",
+//         suggestion: "Add a section detailing mandatory encryption practices."
+//       },
+//       {
+//         issue: "Weak Password Requirements",
+//         risk_level: "Medium",
+//         explanation: "Password complexity rules are not strong enough.",
+//         suggestion: "Set minimum password length and complexity rules."
+//       },
+//       {
+//         issue: "Outdated Incident Response Plan",
+//         risk_level: "Low",
+//         explanation: "Incident response procedures reference old regulations.",
+//         suggestion: "Update IRP to align with modern compliance needs."
+//       }
+//     ];
+
+//     setSelectedFile({ name: "Demo_Document.pdf" });
+//     setRiskReport(demoRisks);
+//   };
+
+//   const { getRootProps, getInputProps, isDragActive } = useDropzone({
+//     onDrop,
+//     accept: {
+//       'application/pdf': [],
+//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [],
+//       'text/plain': [],
+//       'text/csv': [],
+//     },
+//     maxFiles: 1,
+//   });
+
+//   const countByRisk = {
+//     High: riskReport.filter(r => r.risk_level === 'High').length,
+//     Medium: riskReport.filter(r => r.risk_level === 'Medium').length,
+//     Low: riskReport.filter(r => r.risk_level === 'Low').length,
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 px-4 py-10 flex flex-col items-center">
+//       <div className="max-w-3xl mx-auto text-center">
+//         <h1 className="text-4xl font-bold text-blue-700 mb-4">Upload a Document for Compliance Audit</h1>
+//         <p className="text-gray-600 mb-6">
+//           Drag and drop your compliance document or click the box to upload.
+//         </p>
+
+
+
+
+
+
+
+//         <div className="flex justify-center mt-10">
+//   <div
+//     {...getRootProps()}
+//     className="w-full max-w-[420px] border-2 border-dashed border-blue-400 bg-blue-50 rounded-xl p-6 shadow-md transition hover:bg-blue-100 cursor-pointer"
+//   >
+//     <input {...getInputProps()} />
+
+//     <div className="flex flex-col items-center justify-center space-y-3">
+
+//       {/* UPDATED ICON STARTS HERE */}
+//       <svg
+//         xmlns="http://www.w3.org/2000/svg"
+//         className="w-1 h-1 text-blue-500"
+//         fill="none"
+//         viewBox="0 0 24 24"
+//         stroke="currentColor" 
+//         width="40"
+//         height="40"
+//          >
+//         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 7l-4-4m0 0L8 7m4-4v12" />
+//       </svg>
+//       {/* UPDATED ICON ENDS HERE */}
+
+//       <p className="text-lg font-semibold text-gray-700">Drag & Drop files here</p>
+//       <p className="text-sm text-gray-500">or</p>
+
+//       <button className="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition">
+//         Browse Files
+//       </button>
+//     </div>
+//   </div>
+// </div>
+
+
+
+
+
+//         {/* 👇 Demo Button Added here */}
+//         <div className="mt-6">
+//           <button
+//             onClick={loadDemoFile}
+//             className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded shadow text-lg"
+//           >
+//             🚀 Try Demo File
+//           </button>
+//         </div>
+
+//         {uploading && (
+//           <div className="w-full mt-6">
+//             <div className="w-full bg-gray-200 rounded-full h-3">
+//               <div className="bg-blue-600 h-3 rounded-full animate-pulse w-2/3"></div>
+//             </div>
+//             <p className="text-sm text-blue-600 mt-2">Uploading and analyzing...</p>
+//           </div>
+//         )}
+
+//         {selectedFile && (
+//           <div className="mt-6 bg-green-100 text-green-800 px-4 py-2 rounded shadow-sm">
+//             ✅ File Selected: {selectedFile.name}
+//           </div>
+//         )}
+
+//         {riskReport.length > 0 && (
+//           <div className="mt-10">
+//             <h2 className="text-2xl font-semibold mb-4 text-blue-800">
+//               🛡️ Flagged Compliance Risks
+//             </h2>
+
+//             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg mb-8">
+//               <div className="bg-red-100 text-red-800 py-2 px-4 rounded-lg shadow">🟥 High: {countByRisk.High}</div>
+//               <div className="bg-yellow-100 text-yellow-800 py-2 px-4 rounded-lg shadow">🟧 Medium: {countByRisk.Medium}</div>
+//               <div className="bg-green-100 text-green-800 py-2 px-4 rounded-lg shadow">🟩 Low: {countByRisk.Low}</div>
+//             </div>
+
+//             {riskReport.map((risk, index) => (
+//                 <div key={index} className="mt-18">
+//                    <RiskCard {...risk} />
+//                       </div>
+//                          ))}
+
+//             <div className="mt-12  flex flex-col sm:flex-row justify-center items-center gap-6">
+//               <button
+//                 onClick={() => generateCSV(selectedFile?.name || "document", riskReport)}
+//                 className="mt-4 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 shadow text-lg"
+//               >
+//                 📊 Download CSV Report
+//               </button>
+
+//               <button
+//                 onClick={() => generatePDFReport(selectedFile?.name || "document", riskReport)}
+//                 className="mt-8 bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 shadow text-lg"
+//               >
+//                 📄 Download PDF Report
+//               </button>
+//             </div>
+
+//             <div className="mb-24"></div>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
 'use client';
 
 import { useState, useCallback } from 'react';
@@ -21,8 +235,7 @@ export default function UploadPage() {
       formData.append("file", file);
 
       try {
-        //const response = await fetch("http://localhost:8000/upload/", {
-          const response = await fetch("https://regnovaai-backend.onrender.com/upload/", { 
+        const response = await fetch("https://regnovaai-backend.onrender.com/upload/", {
           method: "POST",
           body: formData,
         });
@@ -70,7 +283,7 @@ export default function UploadPage() {
     setRiskReport(demoRisks);
   };
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
       'application/pdf': [],
@@ -88,57 +301,28 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 px-4 py-10 flex flex-col items-center">
-      <div className="max-w-3xl mx-auto text-center">
-        <h1 className="text-4xl font-bold text-blue-700 mb-4">Upload a Document for Compliance Audit</h1>
-        <p className="text-gray-600 mb-6">
-          Drag and drop your compliance document or click the box to upload.
-        </p>
+    <div className="min-h-screen bg-gradient-to-r from-indigo-50 via-blue-50 to-purple-50 px-4 py-10 flex flex-col items-center font-sans">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-5xl font-extrabold text-indigo-700 mb-4 leading-tight">RegnovaAI</h1>
+        <p className="text-lg text-gray-600 mb-8 italic">“Empowering compliance through intelligent document analysis.”</p>
 
+        <div className="flex justify-center">
+          <div
+            {...getRootProps()}
+            className="w-full max-w-[420px] border-2 border-dashed border-blue-400 bg-white/60 backdrop-blur-lg rounded-2xl p-8 shadow-xl hover:bg-white/80 cursor-pointer transition-all"
+          >
+            <input {...getInputProps()} />
+            <div className="flex flex-col items-center space-y-3">
+              <img src="/upload-icon.png" alt="Upload" className="w-12 h-12" />
+              <p className="text-lg font-semibold text-blue-700">Drag & Drop files here</p>
+              <p className="text-sm text-gray-500">or</p>
+              <button className="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition">
+                Browse Files
+              </button>
+            </div>
+          </div>
+        </div>
 
-
-
-
-
-
-        <div className="flex justify-center mt-10">
-  <div
-    {...getRootProps()}
-    className="w-full max-w-[420px] border-2 border-dashed border-blue-400 bg-blue-50 rounded-xl p-6 shadow-md transition hover:bg-blue-100 cursor-pointer"
-  >
-    <input {...getInputProps()} />
-
-    <div className="flex flex-col items-center justify-center space-y-3">
-
-      {/* UPDATED ICON STARTS HERE */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-1 h-1 text-blue-500"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor" 
-        width="40"
-        height="40"
-         >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 7l-4-4m0 0L8 7m4-4v12" />
-      </svg>
-      {/* UPDATED ICON ENDS HERE */}
-
-      <p className="text-lg font-semibold text-gray-700">Drag & Drop files here</p>
-      <p className="text-sm text-gray-500">or</p>
-
-      <button className="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition">
-        Browse Files
-      </button>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-        {/* 👇 Demo Button Added here */}
         <div className="mt-6">
           <button
             onClick={loadDemoFile}
@@ -176,12 +360,12 @@ export default function UploadPage() {
             </div>
 
             {riskReport.map((risk, index) => (
-                <div key={index} className="mt-18">
-                   <RiskCard {...risk} />
-                      </div>
-                         ))}
+              <div key={index} className="mt-6">
+                <RiskCard {...risk} />
+              </div>
+            ))}
 
-            <div className="mt-12  flex flex-col sm:flex-row justify-center items-center gap-6">
+            <div className="mt-12 flex flex-col sm:flex-row justify-center items-center gap-6">
               <button
                 onClick={() => generateCSV(selectedFile?.name || "document", riskReport)}
                 className="mt-4 bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 shadow text-lg"
@@ -204,6 +388,5 @@ export default function UploadPage() {
     </div>
   );
 }
-
 
 

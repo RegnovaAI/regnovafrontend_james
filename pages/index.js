@@ -447,267 +447,267 @@
 
 
 
-// 'use client';
-
-// import { useState, useCallback } from 'react';
-// import { useDropzone } from 'react-dropzone';
-// import RiskCard from '../components/RiskCard';
-// import { generatePDFReport } from '../utils/generatePDF';
-// import { generateCSV } from '../utils/generateCSV';
-
-// export default function UploadPage() {
-//   const [selectedFile, setSelectedFile] = useState(null);
-//   const [riskReport, setRiskReport] = useState([]);
-//   const [uploading, setUploading] = useState(false);
-
-//   const onDrop = useCallback(async (acceptedFiles) => {
-//     const file = acceptedFiles[0];
-//     if (file) {
-//       setSelectedFile(file);
-//       setUploading(true);
-
-//       const formData = new FormData();
-//       formData.append("file", file);
-
-//       try {
-//         const response = await fetch("https://regnovaai-backend.onrender.com/upload/", {
-//           method: "POST",
-//           body: formData,
-//         });
-
-//         const data = await response.json();
-//         setRiskReport(data.risk_report);
-//         setUploading(false);
-
-//         if (data.content) {
-//           alert("✅ File uploaded! Preview:\n" + data.content.slice(0, 300));
-//         } else {
-//           alert("⚠️ No content returned");
-//         }
-//       } catch (error) {
-//         console.error("❌ Upload failed:", error);
-//         alert("❌ Upload failed. Check console.");
-//         setUploading(false);
-//       }
-//     }
-//   }, []);
-
-//   const loadDemoFile = () => {
-//     const demoRisks = [
-//       {
-//         issue: "Missing Encryption Policy",
-//         risk_level: "High",
-//         explanation: "The document lacks guidelines for encrypting data at rest and in transit.",
-//         suggestion: "Add a section detailing mandatory encryption practices."
-//       },
-//       {
-//         issue: "Weak Password Requirements",
-//         risk_level: "Medium",
-//         explanation: "Password complexity rules are not strong enough.",
-//         suggestion: "Set minimum password length and complexity rules."
-//       },
-//       {
-//         issue: "Outdated Incident Response Plan",
-//         risk_level: "Low",
-//         explanation: "Incident response procedures reference old regulations.",
-//         suggestion: "Update IRP to align with modern compliance needs."
-//       }
-//     ];
-
-//     setSelectedFile({ name: "Demo_Document.pdf" });
-//     setRiskReport(demoRisks);
-//   };
-
-//   const { getRootProps, getInputProps } = useDropzone({
-//     onDrop,
-//     accept: {
-//       'application/pdf': [],
-//       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [],
-//       'text/plain': [],
-//       'text/csv': [],
-//     },
-//     maxFiles: 1,
-//   });
-
-//   const countByRisk = {
-//     High: riskReport.filter(r => r.risk_level === 'High').length,
-//     Medium: riskReport.filter(r => r.risk_level === 'Medium').length,
-//     Low: riskReport.filter(r => r.risk_level === 'Low').length,
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white px-4 py-10">
-//       <div className="max-w-4xl w-full text-center space-y-10">
-
-//         <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto" width="140" height="140" />
-
-//         <div className="space-y-3">
-//           <h1 className="text-4xl sm:text-5xl font-bold">Welcome to RegnovaAI</h1>
-//           <p className="text-lg text-blue-100">
-//             AI-powered risk analysis, compliance scoring, and audit reporting for your documents.
-//           </p>
-//         </div>
-
-//         <div {...getRootProps()} className="cursor-pointer border-2 border-dashed border-blue-400 bg-blue-950/30 rounded-xl p-8 shadow-xl transition hover:bg-blue-800">
-//           <input {...getInputProps()} />
-//           <div className="flex flex-col items-center space-y-4">
-//             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="40" height="40">
-//               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 7l-4-4m0 0L8 7m4-4v12" />
-//             </svg>
-//             <p className="text-lg font-semibold text-blue-100">Drag and drop a document here, or click to select one</p>
-//             <button className="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition">
-//               Browse Files
-//             </button>
-//           </div>
-//         </div>
-
-//         <button
-//           onClick={loadDemoFile}
-//           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow-lg"
-//         >
-//           🚀 Try Demo File
-//         </button>
-
-//         {uploading && (
-//           <div>
-//             <div className="w-full bg-gray-200 rounded-full h-3">
-//               <div className="bg-blue-600 h-3 rounded-full animate-pulse w-2/3"></div>
-//             </div>
-//             <p className="text-sm text-blue-200 mt-2">Analyzing document...</p>
-//           </div>
-//         )}
-
-//         {selectedFile && (
-//           <div className="bg-green-100 text-green-800 px-4 py-2 rounded shadow-sm">
-//             ✅ File Selected: {selectedFile.name}
-//           </div>
-//         )}
-
-//         {riskReport.length > 0 && (
-//           <div className="space-y-6">
-//             <h2 className="text-2xl font-semibold text-white">
-//               🛡️ Flagged Compliance Risks
-//             </h2>
-//             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg">
-//               <div className="bg-red-100 text-red-800 py-2 px-4 rounded-lg shadow">🟥 High: {countByRisk.High}</div>
-//               <div className="bg-yellow-100 text-yellow-800 py-2 px-4 rounded-lg shadow">🟧 Medium: {countByRisk.Medium}</div>
-//               <div className="bg-green-100 text-green-800 py-2 px-4 rounded-lg shadow">🟩 Low: {countByRisk.Low}</div>
-//             </div>
-
-//             {riskReport.map((risk, index) => (
-//               <div key={index} className="mt-4">
-//                 <RiskCard {...risk} />
-//               </div>
-//             ))}
-
-//             <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-//               <button
-//                 onClick={() => generateCSV(selectedFile?.name || "document", riskReport)}
-//                 className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 shadow"
-//               >
-//                 📊 Download CSV Report
-//               </button>
-//               <button
-//                 onClick={() => generatePDFReport(selectedFile?.name || "document", riskReport)}
-//                 className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 shadow"
-//               >
-//                 📄 Download PDF Report
-//               </button>
-//             </div>
-//           </div>
-//         )}
-
-//         <div className="text-left bg-white text-gray-800 p-6 rounded-xl shadow-xl">
-//           <h3 className="text-2xl font-bold mb-2">About RegnovaAI</h3>
-//           <p>
-//             RegnovaAI is a pioneering AI startup focused on streamlining compliance risk audits for enterprises. By leveraging advanced document parsing and LLM-driven analysis, RegnovaAI delivers actionable reports on data handling, consent, GDPR, and more — helping teams mitigate risk and stay compliant effortlessly.
-//           </p>
-//         </div>
-
-//         <footer className="text-sm text-blue-200">
-//           &copy; {new Date().getFullYear()} RegnovaAI. All rights reserved.
-//         </footer>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 'use client';
+
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import RiskCard from '../components/RiskCard';
+import { generatePDFReport } from '../utils/generatePDF';
+import { generateCSV } from '../utils/generateCSV';
 
-export default function HomePage() {
+export default function UploadPage() {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [riskReport, setRiskReport] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    setSelectedFile(acceptedFiles[0]);
+  const onDrop = useCallback(async (acceptedFiles) => {
+    const file = acceptedFiles[0];
+    if (file) {
+      setSelectedFile(file);
+      setUploading(true);
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("https://regnovaai-backend.onrender.com/upload/", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        setRiskReport(data.risk_report);
+        setUploading(false);
+
+        if (data.content) {
+          alert("✅ File uploaded! Preview:\n" + data.content.slice(0, 300));
+        } else {
+          alert("⚠️ No content returned");
+        }
+      } catch (error) {
+        console.error("❌ Upload failed:", error);
+        alert("❌ Upload failed. Check console.");
+        setUploading(false);
+      }
+    }
   }, []);
+
+  const loadDemoFile = () => {
+    const demoRisks = [
+      {
+        issue: "Missing Encryption Policy",
+        risk_level: "High",
+        explanation: "The document lacks guidelines for encrypting data at rest and in transit.",
+        suggestion: "Add a section detailing mandatory encryption practices."
+      },
+      {
+        issue: "Weak Password Requirements",
+        risk_level: "Medium",
+        explanation: "Password complexity rules are not strong enough.",
+        suggestion: "Set minimum password length and complexity rules."
+      },
+      {
+        issue: "Outdated Incident Response Plan",
+        risk_level: "Low",
+        explanation: "Incident response procedures reference old regulations.",
+        suggestion: "Update IRP to align with modern compliance needs."
+      }
+    ];
+
+    setSelectedFile({ name: "Demo_Document.pdf" });
+    setRiskReport(demoRisks);
+  };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: { 'application/pdf': [], 'text/plain': [], 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [] },
-    maxFiles: 1
+    accept: {
+      'application/pdf': [],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [],
+      'text/plain': [],
+      'text/csv': [],
+    },
+    maxFiles: 1,
   });
 
+  const countByRisk = {
+    High: riskReport.filter(r => r.risk_level === 'High').length,
+    Medium: riskReport.filter(r => r.risk_level === 'Medium').length,
+    Low: riskReport.filter(r => r.risk_level === 'Low').length,
+  };
+
   return (
-    <div
-      className="min-h-screen bg-cover bg-center text-white px-4 py-10 flex items-center justify-center"
-      style={{ backgroundImage: "url('/bg-hero.jpg')" }}
-    >
-      <div className="max-w-2xl text-center bg-black/60 p-8 rounded-xl shadow-xl">
-        <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-24 mx-auto mb-6" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white px-4 py-10">
+      <div className="max-w-4xl w-full text-center space-y-10">
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3">Welcome to RegnovaAI</h1>
-        <p className="text-lg mb-8">AI-powered risk analysis, compliance scoring, and audit reporting for your documents.</p>
+        <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto" width="140" height="140" />
 
-        {/* Upload Box */}
-        <div
-          {...getRootProps()}
-          className="border-2 border-dashed border-blue-400 p-6 rounded-lg bg-white/10 hover:bg-white/20 transition cursor-pointer mb-4"
-        >
-          <input {...getInputProps()} />
-          <p className="text-white">Drag and drop a document here, or click to select one</p>
-          <button className="mt-3 bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded">Browse Files</button>
+        <div className="space-y-3">
+          <h1 className="text-4xl sm:text-5xl font-bold">Welcome to RegnovaAI</h1>
+          <p className="text-lg text-blue-100">
+            AI-powered risk analysis, compliance scoring, and audit reporting for your documents.
+          </p>
         </div>
 
-        {/* Demo File */}
-        <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded mt-2">
+        <div {...getRootProps()} className="cursor-pointer border-2 border-dashed border-blue-400 bg-blue-950/30 rounded-xl p-8 shadow-xl transition hover:bg-blue-800">
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center space-y-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="40" height="40">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M16 7l-4-4m0 0L8 7m4-4v12" />
+            </svg>
+            <p className="text-lg font-semibold text-blue-100">Drag and drop a document here, or click to select one</p>
+            <button className="px-4 py-1 border border-blue-500 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition">
+              Browse Files
+            </button>
+          </div>
+        </div>
+
+        <button
+          onClick={loadDemoFile}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow-lg"
+        >
           🚀 Try Demo File
         </button>
 
-        {/* About */}
-        <div className="text-sm mt-8 leading-relaxed text-white">
-          <h3 className="text-xl font-semibold mb-2">About RegnovaAI</h3>
+        {uploading && (
+          <div>
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div className="bg-blue-600 h-3 rounded-full animate-pulse w-2/3"></div>
+            </div>
+            <p className="text-sm text-blue-200 mt-2">Analyzing document...</p>
+          </div>
+        )}
+
+        {selectedFile && (
+          <div className="bg-green-100 text-green-800 px-4 py-2 rounded shadow-sm">
+            ✅ File Selected: {selectedFile.name}
+          </div>
+        )}
+
+        {riskReport.length > 0 && (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-white">
+              🛡️ Flagged Compliance Risks
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-lg">
+              <div className="bg-red-100 text-red-800 py-2 px-4 rounded-lg shadow">🟥 High: {countByRisk.High}</div>
+              <div className="bg-yellow-100 text-yellow-800 py-2 px-4 rounded-lg shadow">🟧 Medium: {countByRisk.Medium}</div>
+              <div className="bg-green-100 text-green-800 py-2 px-4 rounded-lg shadow">🟩 Low: {countByRisk.Low}</div>
+            </div>
+
+            {riskReport.map((risk, index) => (
+              <div key={index} className="mt-4">
+                <RiskCard {...risk} />
+              </div>
+            ))}
+
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+              <button
+                onClick={() => generateCSV(selectedFile?.name || "document", riskReport)}
+                className="bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 shadow"
+              >
+                📊 Download CSV Report
+              </button>
+              <button
+                onClick={() => generatePDFReport(selectedFile?.name || "document", riskReport)}
+                className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 shadow"
+              >
+                📄 Download PDF Report
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="text-left bg-white text-gray-800 p-6 rounded-xl shadow-xl">
+          <h3 className="text-2xl font-bold mb-2">About RegnovaAI</h3>
           <p>
             RegnovaAI is a pioneering AI startup focused on streamlining compliance risk audits for enterprises. By leveraging advanced document parsing and LLM-driven analysis, RegnovaAI delivers actionable reports on data handling, consent, GDPR, and more — helping teams mitigate risk and stay compliant effortlessly.
           </p>
         </div>
 
-        {/* Logos */}
-        <div className="max-w-2xl text-center bg-black/60 p-8 rounded-xl shadow-xl">
-          <img src="/said-logo.png" alt="Said Business School" className="h-10" />
-          <img src="/oxford-logo.png" alt="Oxford University" className="h-10" />
-        </div>
-
-        {/* Footer */}
-        <p className="text-xs text-white/70 mt-4">© 2025 RegnovaAI. All rights reserved.</p>
+        <footer className="text-sm text-blue-200">
+          &copy; {new Date().getFullYear()} RegnovaAI. All rights reserved.
+        </footer>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 'use client';
+// import { useState, useCallback } from 'react';
+// import { useDropzone } from 'react-dropzone';
+
+// export default function HomePage() {
+//   const [selectedFile, setSelectedFile] = useState(null);
+
+//   const onDrop = useCallback((acceptedFiles) => {
+//     setSelectedFile(acceptedFiles[0]);
+//   }, []);
+
+//   const { getRootProps, getInputProps } = useDropzone({
+//     onDrop,
+//     accept: { 'application/pdf': [], 'text/plain': [], 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [] },
+//     maxFiles: 1
+//   });
+
+//   return (
+//     <div
+//       className="min-h-screen bg-cover bg-center text-white px-4 py-10 flex items-center justify-center"
+//       style={{ backgroundImage: "url('/bg-hero.jpg')" }}
+//     >
+//       <div className="max-w-2xl text-center bg-black/60 p-8 rounded-xl shadow-xl">
+//         <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-24 mx-auto mb-6" />
+
+//         <h1 className="text-3xl sm:text-4xl font-bold mb-3">Welcome to RegnovaAI</h1>
+//         <p className="text-lg mb-8">AI-powered risk analysis, compliance scoring, and audit reporting for your documents.</p>
+
+//         {/* Upload Box */}
+//         <div
+//           {...getRootProps()}
+//           className="border-2 border-dashed border-blue-400 p-6 rounded-lg bg-white/10 hover:bg-white/20 transition cursor-pointer mb-4"
+//         >
+//           <input {...getInputProps()} />
+//           <p className="text-white">Drag and drop a document here, or click to select one</p>
+//           <button className="mt-3 bg-blue-700 hover:bg-blue-800 text-white px-5 py-2 rounded">Browse Files</button>
+//         </div>
+
+//         {/* Demo File */}
+//         <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded mt-2">
+//           🚀 Try Demo File
+//         </button>
+
+//         {/* About */}
+//         <div className="text-sm mt-8 leading-relaxed text-white">
+//           <h3 className="text-xl font-semibold mb-2">About RegnovaAI</h3>
+//           <p>
+//             RegnovaAI is a pioneering AI startup focused on streamlining compliance risk audits for enterprises. By leveraging advanced document parsing and LLM-driven analysis, RegnovaAI delivers actionable reports on data handling, consent, GDPR, and more — helping teams mitigate risk and stay compliant effortlessly.
+//           </p>
+//         </div>
+
+//         {/* Logos */}
+//         <div className="flex justify-center items-center gap-4 mt-6">
+//           <img src="/said-logo.png" alt="Said Business School" className="h-10" />
+//           <img src="/oxford-logo.png" alt="Oxford University" className="h-10" />
+//         </div>
+
+//         {/* Footer */}
+//         <p className="text-xs text-white/70 mt-4">© 2025 RegnovaAI. All rights reserved.</p>
+//       </div>
+//     </div>
+//   );
+// }

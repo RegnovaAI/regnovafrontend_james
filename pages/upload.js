@@ -300,7 +300,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen text-white bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12">
+    <div className="min-h-screen text-white bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12 flex flex-col items-center justify-center text-center font-sans">
       <div className="max-w-4xl mx-auto text-center">
 
         <img src="/regnovaai-logo.png" alt="RegnovaAI Logo" className="w-32 mx-auto mb-6" />
@@ -309,7 +309,7 @@ export default function UploadPage() {
           AI-powered risk analysis, compliance scoring, and audit reporting for your documents.
         </p>
 
-        <div {...getRootProps()} className="cursor-pointer border-2 border-dashed border-blue-400 bg-blue-950/30 rounded-xl p-8 shadow-xl transition hover:bg-blue-800">
+        <div {...getRootProps()} className="flex flex-col items-center justify-center text-center font-sans">
           <input {...getInputProps()} />
           <div className="flex flex-col items-center space-y-4">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -321,7 +321,7 @@ export default function UploadPage() {
 
         <button
           onClick={loadDemoFile}
-          className="mt-6 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow-lg"
+          className="mt-6 bg-purple-700 hover:bg-purple-800 text-white px-8 py-3 rounded-full text-lg font-medium shadow-md"
         >
           🚀 Try Demo File
         </button>
@@ -382,7 +382,7 @@ export default function UploadPage() {
           </p>
         </div>
 
-        <footer className="mt-16 text-sm text-blue-200">
+        <footer className="mt-16 text-sm text-blue-300">
           &copy; {new Date().getFullYear()} RegnovaAI. All rights reserved.
         </footer>
       </div>

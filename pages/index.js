@@ -536,15 +536,20 @@ export default function UploadPage() {
   };
 
   return (
-<div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white px-4 py-10">
-    <div className="w-full max-w-4xl text-center space-y-10">
+<div className="min-h-screen text-white bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 py-12 flex flex-col items-center justify-center text-center font-sans">
+  <div className="w-full flex justify-end px-6 py-4 absolute top-0 right-0 z-10 text-lg text-blue-100 space-x-6">
+    <a href="#about" className="hover:underline">About</a>
+    <a href="#products" className="hover:underline">Products</a>
+    <a href="/plans" className="hover:underline">Plans</a>
+    <a href="#contact" className="hover:underline">Contact</a>
+  </div>
+
+  <div className="w-full max-w-4xl text-center space-y-10">
 
       <img
         src="/regnovaai-logo.png"
         alt="RegnovaAI Logo"
-        className="w-32 mx-auto"
-        width="140"
-        height="140"
+        className="w-80 mx-auto mb-6"
       />
 
       <div className="space-y-3">
@@ -554,7 +559,7 @@ export default function UploadPage() {
         </p>
       </div>
 
-        <div {...getRootProps()} className="cursor-pointer border-2 border-dashed border-blue-400 bg-blue-950/30 rounded-xl p-8 shadow-xl transition hover:bg-blue-800">
+        <div {...getRootProps()} className="flex flex-col items-center justify-center text-center font-sans">
           <input {...getInputProps()} />
           <div className="flex flex-col items-center space-y-4">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="40" height="40">
@@ -569,7 +574,7 @@ export default function UploadPage() {
 
         <button
           onClick={loadDemoFile}
-          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow-lg"
+          className="mt-6 bg-purple-700 hover:bg-purple-800 text-white px-8 py-3 rounded-full text-lg font-medium shadow-md"
         >
           🚀 Try Demo File
         </button>
@@ -623,14 +628,14 @@ export default function UploadPage() {
           </div>
         )}
 
-        <div className="text-left bg-white text-gray-800 p-6 rounded-xl shadow-xl">
+        <div className="mt-20 text-center text-blue-100 px-4">
           <h3 className="text-2xl font-bold mb-2">About RegnovaAI</h3>
-          <p>
+          <p className="max-w-3xl mx-auto">
             RegnovaAI is a pioneering AI startup focused on streamlining compliance risk audits for enterprises. By leveraging advanced document parsing and LLM-driven analysis, RegnovaAI delivers actionable reports on data handling, consent, GDPR, and more — helping teams mitigate risk and stay compliant effortlessly.
           </p>
         </div>
 
-        <footer className="text-sm text-blue-200">
+        <footer className="mt-16 text-sm text-blue-300">
           &copy; {new Date().getFullYear()} RegnovaAI. All rights reserved.
         </footer>
       </div>
